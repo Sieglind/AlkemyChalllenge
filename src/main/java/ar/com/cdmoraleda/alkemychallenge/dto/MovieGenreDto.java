@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class MovieGenreDto {
     private String genreName;
     private String genrePicture;
-    private Integer[] asoccMovies;
+    private String asoccMovies;
 }

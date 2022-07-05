@@ -1,8 +1,12 @@
 package ar.com.cdmoraleda.alkemychallenge.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,19 +14,21 @@ import javax.persistence.*;
 
 @Entity
 @Table
-public class Movie {
+public class Character {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @Column
+    private String name;
+    @Column
     private String pictUrl;
     @Column
-    private String title;
+    private Integer age;
     @Column
-    private Integer launchYear;
+    private String weight;
     @Column
-    private Integer score;
+    private String history;
     @Column
-    private String assocCharacters;
+    private String assocMovies;
 }

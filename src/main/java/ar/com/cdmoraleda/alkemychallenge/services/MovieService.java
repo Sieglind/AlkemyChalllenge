@@ -12,12 +12,11 @@ public class MovieService {
     @Autowired
     private IMovieRepository movieRepository;
 
-
     public Movie createMovie(MovieDto movie){
         Movie movieToSave = new Movie().builder()
-                .picture(movie.getPicture())
+                .pictUrl(movie.getPicture())
                 .title(movie.getTitle())
-                .year(movie.getYear())
+                .launchYear(movie.getYear())
                 .score(movie.getScore())
                 .build();
         return movieRepository.save(movieToSave);

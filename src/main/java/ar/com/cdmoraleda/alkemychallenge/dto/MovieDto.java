@@ -14,5 +14,5 @@ public class MovieDto {
     private String title;
     private Integer year;
     private Integer score;
-    private Integer asoccCharacters;
+    private String asoccCharacters;
 }
