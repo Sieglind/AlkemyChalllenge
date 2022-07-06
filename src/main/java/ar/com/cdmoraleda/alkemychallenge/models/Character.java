@@ -1,11 +1,13 @@
 package ar.com.cdmoraleda.alkemychallenge.models;
 
+import ar.com.cdmoraleda.alkemychallenge.dto.MovieCharacterDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -13,22 +15,29 @@ import javax.persistence.*;
 @Data
 
 @Entity
-@Table
+@Table(name = "Characters")
 public class Character {
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue()
     private Integer id;
-    @Column
     private String name;
-    @Column
     private String pictUrl;
-    @Column
     private Integer age;
-    @Column
     private String weight;
-    @Column
     private String history;
-    @Column
-    private String assocMovies;
+    @OneToMany
+    private List<CFtM> assocMovies;
+
+    public Character(MovieCharacterDto movieCharacterDto) {
+        this.name = movieCharacterDto.getName();
+        this.pictUrl = movieCharacterDto.getPictUrl();
+        this.age = movieCharacterDto.getAge();
+        this.weight = movieCharacterDto.getWeight();
+        this.history = movieCharacterDto.getHistory();
+    }
+
+    public Character(Integer id, MovieCharacterDto movieCharacterDto) {
+        new Character(movieCharacterDto);
+        this.id = id;
+    }
 }

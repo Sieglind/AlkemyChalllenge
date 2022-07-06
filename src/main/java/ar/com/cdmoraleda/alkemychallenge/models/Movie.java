@@ -1,28 +1,33 @@
 package ar.com.cdmoraleda.alkemychallenge.models;
 
+import ar.com.cdmoraleda.alkemychallenge.dto.MovieDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 
 @Entity
-@Table
+@Table(name = "Movies")
 public class Movie {
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Column
     private String pictUrl;
-    @Column
     private String title;
-    @Column
-    private Integer launchYear;
-    @Column
+    private Integer releaseYear;
     private Integer score;
-    @Column
-    private String assocCharacters;
+    @OneToMany
+    private List<CFtM> assocCharacters;
+
+    public Movie(MovieDto movie) {
+        this.pictUrl = movie.getPictUrl();
+        this.title = movie.getTitle();
+        this.releaseYear = movie.getReleaseYear();
+        this.score = movie.getScore();
+    }
 }

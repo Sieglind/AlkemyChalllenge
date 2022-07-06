@@ -5,14 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieDto {
-    private String picture;
+    private String pictUrl;
     private String title;
-    private Integer year;
+    private Integer releaseYear;
     private Integer score;
-    private String asoccCharacters;
+    private List<String> asoccCharacters;
 }

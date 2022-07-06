@@ -1,11 +1,13 @@
 package ar.com.cdmoraleda.alkemychallenge.models;
 
+import ar.com.cdmoraleda.alkemychallenge.dto.MovieGenreDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -13,16 +15,18 @@ import javax.persistence.*;
 @Data
 
 @Entity
-@Table
+@Table(name = "Genres")
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
     private Integer id;
-    @Column
     private String pictUrl;
-    @Column
     private String name;
-    @Column
-    private String assocMovies;
+    @OneToMany
+    private List<Movie> assocMovies;
+
+    public Genre(MovieGenreDto movieGenreDto) {
+        this.pictUrl = movieGenreDto.getPictUrl();
+        this.name = movieGenreDto.getName();
+    }
 }
