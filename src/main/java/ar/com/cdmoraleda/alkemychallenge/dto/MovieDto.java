@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
+
 
 @Data
 @Builder
@@ -16,5 +16,5 @@ public class MovieDto {
     private String title;
     private Integer releaseYear;
     private Integer score;
-    private List<String> asoccCharacters;
+    private List<CharacterDto> characters;
 }

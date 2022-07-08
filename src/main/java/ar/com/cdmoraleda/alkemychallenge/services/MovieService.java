@@ -6,21 +6,27 @@ import ar.com.cdmoraleda.alkemychallenge.repositories.IMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class MovieService {
     @Autowired
-    private IMovieRepository movieRepository;
+    IMovieRepository movieRepository;
     @Autowired
-    private CFtMService cFtMService;
+    CharacterService characterService;
 
     public Movie createMovie(MovieDto movieDto) {
-        cFtMService.addCFtM(movieDto);
-        return movieRepository.save(new Movie(movieDto));
+        Movie movieToSave = new Movie(movieDto);
+        movieDto.getCharacters().forEach((characterDto -> {
+            movieToSave.getAsoccCharacters().add(characterService.createCharacter(characterDto));
+        }));
+        return movieRepository.save(movieToSave);
     }
 
-    public List<Movie> findMovie(String title) {
-        return movieRepository.findByTitle(title);
+    public Movie updateMovie(MovieDto movieDto, Integer id) {
+        Movie movieToUpdate = movieRepository.findById(id).get();
+        Movie updatedMovie = new Movie(movieDto,movieToUpdate);
+        return movieRepository.save(updatedMovie);
     }
 }

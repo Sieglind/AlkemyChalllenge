@@ -11,11 +11,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MovieCharacterDto {
+public class CharacterDto {
     private String pictUrl;
     private String name;
     private Integer age;
     private String weight;
     private String history;
-    private List<String> asoccMovies;
+    private List<Integer> asoccMovies;
 }

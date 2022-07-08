@@ -3,24 +3,23 @@ package ar.com.cdmoraleda.alkemychallenge.controller;
 import ar.com.cdmoraleda.alkemychallenge.dto.MovieDto;
 import ar.com.cdmoraleda.alkemychallenge.models.Movie;
 import ar.com.cdmoraleda.alkemychallenge.services.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/movies")
 public class MovieController {
     @Autowired
-    private MovieService movieService;
+    MovieService movieService;
 
     @PostMapping
-    public Movie createMovie(@RequestBody MovieDto movie) {
-        return movieService.createMovie(movie);
+    Movie createMovie(@RequestBody MovieDto movieDto) {
+        return movieService.createMovie(movieDto);
     }
 
-    @GetMapping
-    public List<Movie> findMovie(@RequestParam String title) {
-        return movieService.findMovie(title);
+    @PutMapping
+    Movie updateMovie(@RequestBody MovieDto movieDto, @RequestParam Integer id){
+        return movieService.updateMovie(movieDto,id);
     }
 }
