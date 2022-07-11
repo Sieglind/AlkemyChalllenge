@@ -11,11 +11,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CharacterDto {
+public class GenreDto {
+    private Integer genreId;
     private String pictUrl;
-    private String name;
-    private Integer age;
-    private String weight;
-    private String history;
-    private List<Integer> movies;
+    private String genreName;
+    private List<Integer> asoccMovies;
 }
