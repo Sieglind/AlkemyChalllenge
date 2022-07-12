@@ -1,12 +1,11 @@
 package ar.com.cdmoraleda.alkemychallenge.controller;
 
+import ar.com.cdmoraleda.alkemychallenge.services.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.dto.FoundMovie;
 import ar.com.cdmoraleda.alkemychallenge.dto.MovieDto;
 import ar.com.cdmoraleda.alkemychallenge.models.Movie;
-import ar.com.cdmoraleda.alkemychallenge.services.MovieService;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -26,9 +25,9 @@ public class MovieController {
         return movieService.findMovieByTitle(name);
     }
 
-    @GetMapping(params = {"genreId","order"})
+    @GetMapping(params = {"genreId", "order"})
     List<FoundMovie> filterMoviesByGenre(@RequestParam Integer genreId, @RequestParam String order) {
-        return movieService.filterMoviesByGenre(genreId,order);
+        return movieService.filterMoviesByGenre(genreId, order);
     }
 
     @PutMapping
@@ -37,17 +36,17 @@ public class MovieController {
     }
 
     @DeleteMapping
-    void deleteMovie(@RequestParam Integer movieId){
+    void deleteMovie(@RequestParam Integer movieId) {
         movieService.deleteMovie(movieId);
     }
 
     @PostMapping("/{movieId}/characters/{characterId}")
-    void addCharacterToMovie(@PathVariable Integer movieId, @PathVariable Integer characterId){
-        movieService.addCharacterToMovie(movieId,characterId);
+    void addCharacterToMovie(@PathVariable Integer movieId, @PathVariable Integer characterId) {
+        movieService.addCharacterToMovie(movieId, characterId);
     }
 
     @DeleteMapping("/{movieId}/characters/{characterId}")
-    void removeCharacterFromMovie(@PathVariable Integer movieId, @PathVariable Integer characterId){
-        movieService.removeCharacterFromMovie(movieId,characterId);
+    void removeCharacterFromMovie(@PathVariable Integer movieId, @PathVariable Integer characterId) {
+        movieService.removeCharacterFromMovie(movieId, characterId);
     }
 }

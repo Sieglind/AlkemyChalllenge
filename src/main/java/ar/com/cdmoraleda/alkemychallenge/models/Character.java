@@ -1,17 +1,17 @@
 package ar.com.cdmoraleda.alkemychallenge.models;
 
-import ar.com.cdmoraleda.alkemychallenge.dto.CharacterDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-
+import ar.com.cdmoraleda.alkemychallenge.dto.CharacterDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
+import lombok.*;
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 
 @Entity
@@ -26,7 +26,7 @@ public class Character {
     private String weight;
     private String history;
     @ManyToMany(mappedBy = "asoccCharacters")
-    @JsonIgnoreProperties({"asoccCharacters","asoccGenres"})
+    @JsonIgnoreProperties({"asoccCharacters", "asoccGenres"})
     private List<Movie> asoccMovies;
 
     public Character(CharacterDto characterDto) {

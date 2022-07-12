@@ -1,16 +1,17 @@
 package ar.com.cdmoraleda.alkemychallenge.models;
 
-import ar.com.cdmoraleda.alkemychallenge.dto.MovieDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import ar.com.cdmoraleda.alkemychallenge.dto.MovieDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
+import lombok.*;
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 
 @Entity
@@ -33,7 +34,7 @@ public class Movie {
     @JsonIgnoreProperties("asoccMovies")
     private List<Character> asoccCharacters;
 
-    @ManyToMany(cascade = CascadeType.ALL )
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "movies_genres",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -52,7 +53,7 @@ public class Movie {
     }
 
     public Movie(MovieDto movieDto, Movie movieToUpdate) {
-        this.movieId=movieToUpdate.getMovieId();
+        this.movieId = movieToUpdate.getMovieId();
         if (movieDto.getPictUrl() != null) {
             this.pictUrl = movieDto.getPictUrl();
         }
