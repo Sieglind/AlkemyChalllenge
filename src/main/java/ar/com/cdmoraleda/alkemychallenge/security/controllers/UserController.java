@@ -11,7 +11,7 @@ import java.io.IOException;
 
 
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/auth/register")
 public class UserController {
 
     final

@@ -4,13 +4,13 @@ registerForm.addEventListener("submit", async (e) => {
     let form = e.currentTarget;
     let url = form.action;
     try {
-        console.log(new FormData(form).entries())
-        obj = Object.fromEntries(new FormData(form).entries())
-        let formDataJsonString = JSON.stringify(obj);
+        let object = Object.fromEntries(new FormData(form).entries())
+        let formDataJsonString = JSON.stringify(object);
         let responseData = postFromFieldsAsJson({url, formDataJsonString});
     } catch (error) {
-        console.error(`An error has ocurred ${error}`);
+        console.error(`An error has occurred ${error}`);
     }
+    registerForm.reset();
 })
 
 async function postFromFieldsAsJson({url, formDataJsonString}) {

@@ -5,9 +5,21 @@ loginForm.addEventListener("submit", async (e) => {
     let url = form.action;
     try {
         let data = new FormData(form);
-        let bodyContent = "userName=" + encodeURIComponent(data.get("userName")) + "&password=" + encodeURIComponent(data.get("password"));
-        let responseData = postFromFieldsAsJson({url,bodyContent});
-        console.log(responseData)
+        let userName = data.get("userName").toString();
+        let password = data.get("password").toString();
+        let bodyContent = "userName=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password);
+        let response = await postFromFieldsAsJson({url,bodyContent});
+        if (response.ok){
+            let tokens = await response.json();
+            sessionStorage.setItem("sessionStatus","authorized");
+            sessionStorage.setItem("accessToken",tokens.accessToken);
+            sessionStorage.setItem("refreshToken",tokens.refreshToken);
+            sessionStorage.setItem("userName",userName)
+        }
+        if(!response.ok){
+            sessionStorage.setItem("sessionStatus","unauthorized");
+        }
+        setTimeout(()=>{window.location="/index.html"},500);
     } catch (error) {
         console.error(`An error has ocurred ${error}`);
     }
@@ -18,15 +30,9 @@ async function postFromFieldsAsJson({url,bodyContent}){
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            Accept: "*/*",
+            Accept: "application/json",
         },
         body: bodyContent,
     };
-    let res = await fetch(url, fetchOptions);
-    if (!res.ok) {
-        let error = await res.text();
-        throw new Error(error);
-    }
-    setTimeout(()=>{window.location="/index.html"},1500);
-    return res.json();
+    return await fetch(url, fetchOptions);
 }

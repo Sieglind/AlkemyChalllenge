@@ -1,73 +1,158 @@
 body{
-    background: #457b9d;
+    background-color: #457b9d;
 }
+
 a{
     font-family: "Cambria Math";
-    font-size: 16px;
     color: ivory;
 }
-#banner{
-    text-align: center;
-    font-family: "Cambria Math";
 
-    position: absolute;
-    left: 35%;
-    top: 30px;
-    z-index: 1;
-
-    width: 30%;
-    height: 40px;
-
-    margin: 5px;
-    padding: 0px;
-    border: 2px solid black;
-    border-radius: 5px;
-
-    background-color: #a8dadc;
-}
-#menu{
-    position: absolute;
+.top-menu{
+    position: relative;
     top: 10px;
-    left: 5%;
 
+    height: 45px;
     width: 90%;
-    height: 40px;
 
-    margin: 5px;
-    padding: 0px;
+    margin: auto;
+
     border: 2px solid black;
     border-radius: 5px;
 
     background-color: #1d3557;
 }
-#database{
+
+.top-menu .database{
     position: absolute;
-    left: 1%;
     top: 25%;
+    left: 10px;
 }
-#register{
+
+.top-menu .register{
     position: absolute;
-    right: 6%;
     top: 25%;
+    right: 59px;
 }
-#login{
+
+.top-menu .login{
     position: absolute;
-    right: 1%;
     top: 25%;
+    right: 10px;
 }
-#formContainer{
+
+.top-menu .banner{
     text-align: center;
 
-    position: absolute;
-    top: 80px;
-    left: 30%;
+    position: relative;
+    top: 50%;
 
-    width: 40%;
+    width: 50%;
 
-    margin: 5px;
-    padding: 0px;
-    border: 1px solid black;
+    margin: auto;
+
+    background-color: #a8dadc;
+
+    border: 3px solid black;
     border-radius: 5px;
+}
+
+.form-container{
+    text-align: center;
+    position: relative;
+    top: 40px;
+
+    width: 20%;
+
+    margin: auto;
 
     background-color: #faedcd;
+
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.task-selector{
+    text-align: center;
+
+    position: relative;
+    top: 40px;
+
+    width: 50%;
+    height: 120px;
+
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 10px;
+
+    background-color: #faedcd;
+}
+
+.task-selector .task{
+    font-size: x-large;
+
+    position: relative;
+    top: 50px;
+
+    height: 40px;
+
+    margin: auto;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 15px;
+
+    background-color: #457b9d;
+}
+
+/**/
+
+details {
+    position: relative;
+    top: 40px;
+    user-select: none;
+}
+
+details>summary span.icon {
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s;
+    margin-left: auto;
+}
+
+details[open] summary span.icon {
+    transform: rotate(180deg);
+}
+
+summary {
+    color: #faedcd;
+    font-size: large;
+
+    display: flex;
+    cursor: pointer;
+
+    width: 30%;
+
+    border: 1px solid black;
+    border-radius: 3px;
+
+    background-color: #1d3557;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+details .movie-task{
+    background-color: #faedcd;
+}
+
+.task-form-container{
+    position: relative;
+
+    height: 250px;
+    width: 30%;
+
+    background-color: #faedcd;
+
+    border: 1px solid black;
+    border-radius: 5px;
 }
