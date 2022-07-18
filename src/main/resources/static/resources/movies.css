@@ -1,0 +1,22 @@
+.buttons {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+
+    width: 110px;
+}
+
+#resetMovie, #resetCharacter, #cancelMovie {
+    right: 120px;
+}
+
+label {
+    position: relative;
+    left: 5px;
+}
+
+input, select, textarea {
+    position: absolute;
+    right: 5px;
+    width: 50%;
+}

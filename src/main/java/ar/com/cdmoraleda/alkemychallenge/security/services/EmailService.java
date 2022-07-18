@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Service
 public class EmailService {
-    private String apiKey = "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";
+    private String apiKey = "";
     public void sendConfirmation(ApiUserDto apiUserDto) throws IOException {
         Mail mail = new Mail(
                 new Email("alkemyapicdm@gmail.com"),

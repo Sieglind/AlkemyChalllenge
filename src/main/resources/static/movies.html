@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="resources/style.css">
+    <link rel="stylesheet" href="resources/movies.css">
+    <title>Movie Management</title>
+</head>
+<body>
+<div class="top-menu">
+    <a class="database" href="/h2" target="_blank">Go to H2 Database</a>
+    <a class="register" id="register" href="register.html" style="display: block">Register</a>
+    <a class="login" id="login" href="login.html" style="display: block">Login</a>
+    <a class="login" id="logout" style="display: none">Logout</a>
+    <h1 class="banner" id="banner">Welcome to my API</h1>
+</div>
+<details class="details">
+    <summary>
+        - ADD A MOVIE
+        <span class="icon">⬇️</span>
+    </summary>
+    <div class="task-form-container" id="movieFormContainer" style="display: block">
+        <form class="addMovieForm" id="addMovieForm" name="form">
+            <br/>
+            <div class="movieParameter">
+                <label for="moviePictUrl">IMDb Url: </label>
+                <input type="url" id="moviePictUrl" name="pictUrl" required="true"/>
+            </div>
+            <br/>
+            <div class="movieParameter">
+                <label for="title">Title: </label>
+                <input type="text" id="title" name="title" required="true"/>
+            </div>
+            <br/>
+            <div class="movieParameter">
+                <label for="releaseYear">Release year: </label>
+                <input type="number" id="releaseYear" name="releaseYear" required="true"/>
+            </div>
+            <br/>
+            <div class="movieParameter">
+                <label for="score">Score: </label>
+                <input type="number" id="score" name="score" required="true"/>
+            </div>
+            <br/>
+            <div>
+                <input class="buttons" type="reset" id="resetMovie" value="Reset">
+                <input class="buttons" type="submit" id="submitMovie" value="Save Movie">
+            </div>
+            <br/>
+        </form>
+    </div>
+    <div class="task-form-container" id="characterCountFormContainer" style="display: none">
+        <form class="addCharacterCountForm" id="addCharacterCountForm">
+            <br/>
+            <div>
+                <label for="characterCount">How many characters will you add?</label>
+                <input type="number" id="characterCount" name="characterCount"/>
+            </div>
+            <br/>
+            <div>
+                <input class="buttons" type="submit" id="okCounter" value="OK">
+            </div>
+            <br/>
+        </form>
+    </div>
+    <div class="task-form-container" id="characterFormContainer" style="display: none">
+        <form class="addCharacterForm" id="addCharacterForm" name="form">
+            <br/>
+            <div class="characterParameter">
+                <label for="characterPictUrl">IMDb Url: </label>
+                <input type="url" id="characterPictUrl" name="pictUrl" required="true"/>
+            </div>
+            <br/>
+            <div class="characterParameter">
+                <label for="name">Name: </label>
+                <input type="text" id="name" name="name" required="true"/>
+            </div>
+            <br/>
+            <div class="characterParameter">
+                <label for="age">Age: </label>
+                <input type="number" id="age" name="age" required="true"/>
+            </div>
+            <br/>
+            <div class="characterParameter">
+                <label for="weight">Weight: </label>
+                <select id="weight" name="weight">
+                    <option value="Protagonist">Protagonist</option>
+                    <option value="Secondary">Secondary</option>
+                </select>
+            </div>
+            <br/>
+            <div class="characterParameter">
+                <label for="history">History: </label>
+                <textarea id="history" name="history" rows="3" cols="40"></textarea>
+            </div>
+            <br/>
+            <div>
+                <input class="buttons" type="reset" id="resetCharacter" value="Reset">
+                <input class="buttons" type="submit" id="submitCharacter" value="Save Character">
+            </div>
+            <br/>
+        </form>
+    </div>
+    <div class="task-form-container" id="saveMovieFormContainer" style="display: none">
+        <form class="saveMovieForm" id="saveMovieForm">
+            <br/>
+            <h1>Save movie on Database?</h1>
+            <input class="buttons" type="reset" id="cancelMovie" value="Decline">
+            <input class="buttons" type="submit" id="sendMovie" value="Accept">
+        </form>
+    </div>
+</details>
+<script type="text/javascript" src="resources/movies.js"></script>
+</body>
+</html>
