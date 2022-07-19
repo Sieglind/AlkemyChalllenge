@@ -4,8 +4,8 @@ package ar.com.cdmoraleda.alkemychallenge.database.services;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.FoundCharacter;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Character;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Movie;
-import ar.com.cdmoraleda.alkemychallenge.database.repositories.IMovieRepository;
-import ar.com.cdmoraleda.alkemychallenge.database.repositories.ICharacterRepository;
+import ar.com.cdmoraleda.alkemychallenge.security.dto.repositories.IMovieRepository;
+import ar.com.cdmoraleda.alkemychallenge.security.dto.repositories.ICharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.CharacterDto;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class CharacterService {
         return characterRepository.save(savedCharacter);
     }
 
-    public Movie createCharacter(CharacterDto characterDto, Movie movie) {
+    public void createCharacter(CharacterDto characterDto, Movie movie) {
         Character savedCharacter;
         if (characterRepository.findByName(characterDto.getName()) == null) {
             savedCharacter = new Character(characterDto);
@@ -40,7 +40,6 @@ public class CharacterService {
         }
         savedCharacter.addMovie(movie);
         characterRepository.save(savedCharacter);
-        return movie;
     }
 
     public FoundCharacter findByName(String name) {

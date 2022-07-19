@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Base64;
 
 
 @Service
 public class EmailService {
-    private String apiKey = "";
+    @Value("${api-key}")
+    private String apiKey;
     public void sendConfirmation(ApiUserDto apiUserDto) throws IOException {
         Mail mail = new Mail(
                 new Email("alkemyapicdm@gmail.com"),
@@ -27,7 +29,7 @@ public class EmailService {
                         "Thanks for register to use my Alkemy Challenge API"
                 )
         );
-        SendGrid sg = new SendGrid(apiKey);
+        SendGrid sg = new SendGrid(new String(Base64.getDecoder().decode(apiKey)));
         Request request = new Request();
         try {
             request.setMethod(Method.POST);

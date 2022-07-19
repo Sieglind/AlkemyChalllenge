@@ -4,6 +4,7 @@ import ar.com.cdmoraleda.alkemychallenge.security.dto.ApiUserDto;
 import ar.com.cdmoraleda.alkemychallenge.security.models.ApiUser;
 import ar.com.cdmoraleda.alkemychallenge.security.repositories.IApiUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,16 +36,16 @@ public class ApiUserService implements UserDetailsService {
         return new User(apiUser.getUserName(),apiUser.getPassword(),authorities);
     }
 
-    public String registerNewUser(ApiUserDto apiUserDto) throws IOException {
+    public ResponseEntity<String> registerNewUser(ApiUserDto apiUserDto) throws IOException {
         if (apiUserRepository.findByUserName(apiUserDto.getUserName()) != null) {
-            return "Ese nombre de usuario ya existe";
+            return ResponseEntity.ok("Username already use");
         } else if (apiUserRepository.findByEmail(apiUserDto.getEmail()) != null) {
-            return "Ese correo ya ha sido usado";
+            return ResponseEntity.ok("Email already in use");
         } else {
             apiUserDto.setPassword(passwordEncoder.encode(apiUserDto.getPassword()));
             apiUserRepository.save(new ApiUser(apiUserDto));
-            //emailService.sendConfirmation(apiUserDto);
-            return "El usuario ha sido registrado correctamente";
+            emailService.sendConfirmation(apiUserDto);
+            return ResponseEntity.ok("Username correctly created");
         }
     }
 }

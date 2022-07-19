@@ -1,15 +1,15 @@
 package ar.com.cdmoraleda.alkemychallenge.security.models;
 
 import ar.com.cdmoraleda.alkemychallenge.security.dto.ApiUserDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
+@Setter
 
 @Entity
 @Table(name = "USERS")

@@ -3,7 +3,7 @@ package ar.com.cdmoraleda.alkemychallenge.database.services;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Genre;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.FoundMovie;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.MovieDto;
-import ar.com.cdmoraleda.alkemychallenge.database.repositories.IMovieRepository;
+import ar.com.cdmoraleda.alkemychallenge.security.dto.repositories.IMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Character;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Movie;

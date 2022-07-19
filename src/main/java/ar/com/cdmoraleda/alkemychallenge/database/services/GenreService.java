@@ -1,8 +1,8 @@
 package ar.com.cdmoraleda.alkemychallenge.database.services;
 
 import ar.com.cdmoraleda.alkemychallenge.database.models.Genre;
-import ar.com.cdmoraleda.alkemychallenge.database.repositories.IGenreRepository;
-import ar.com.cdmoraleda.alkemychallenge.database.repositories.IMovieRepository;
+import ar.com.cdmoraleda.alkemychallenge.security.dto.repositories.IGenreRepository;
+import ar.com.cdmoraleda.alkemychallenge.security.dto.repositories.IMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.GenreDto;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Movie;

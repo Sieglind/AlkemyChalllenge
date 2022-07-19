@@ -47,7 +47,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         String accessToken = createJWToken(user,request,algorithm,5*60*1000);
         String refreshToken = createJWToken(user,request,algorithm,15*60*1000);
         Map<String,String> tokens = Map.of("accessToken",accessToken,"refreshToken",refreshToken);

@@ -1,4 +1,4 @@
-package ar.com.cdmoraleda.alkemychallenge.database.repositories;
+package ar.com.cdmoraleda.alkemychallenge.security.dto.repositories;
 
 import ar.com.cdmoraleda.alkemychallenge.database.models.Character;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Movie;
