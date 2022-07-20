@@ -26,9 +26,9 @@ public class Character {
     private Integer age;
     private String weight;
     private String history;
-    @ManyToMany(mappedBy = "asoccCharacters")
-    @JsonIgnoreProperties({"asoccCharacters", "asoccGenres"})
-    private List<Movie> asoccMovies;
+    @ManyToMany(mappedBy = "assocCharacters")
+    @JsonIgnoreProperties({"assocCharacters", "assocGenres"})
+    private List<Movie> assocMovies;
 
     public Character(CharacterDto characterDto) {
         this.name = characterDto.getName();
@@ -36,15 +36,15 @@ public class Character {
         this.age = characterDto.getAge();
         this.weight = characterDto.getWeight();
         this.history = characterDto.getHistory();
-        this.asoccMovies = new ArrayList<>();
+        this.assocMovies = new ArrayList<>();
     }
 
     public void addMovie(Movie movie) {
-        this.asoccMovies.add(movie);
-        movie.getAsoccCharacters().add(this);
+        this.assocMovies.add(movie);
+        movie.getAssocCharacters().add(this);
     }
 
     public void removeMovie(Movie movie) {
-        this.asoccMovies.remove(movie);
+        this.assocMovies.remove(movie);
     }
 }

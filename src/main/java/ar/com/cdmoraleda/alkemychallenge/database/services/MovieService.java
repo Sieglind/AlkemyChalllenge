@@ -3,13 +3,14 @@ package ar.com.cdmoraleda.alkemychallenge.database.services;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Genre;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.FoundMovie;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.MovieDto;
-import ar.com.cdmoraleda.alkemychallenge.security.dto.repositories.IMovieRepository;
+import ar.com.cdmoraleda.alkemychallenge.database.repositories.IMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Character;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Movie;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -29,45 +30,45 @@ public class MovieService {
     }
 
     public FoundMovie findMovieByTitle(String name) {
-        Movie movie = movieRepository.findByTitle(name);
+        Movie movie = movieRepository.findByTitle(name).orElseThrow();
+
         return new FoundMovie(movie);
     }
 
     public List<FoundMovie> filterMoviesByGenre(Integer genreId, String order) {
-        List<FoundMovie> foundMovies = new ArrayList<>();
         List<Movie> fetchedMovies = new ArrayList<>();
         Genre genre = genreService.genreRepository.findById(genreId).orElseThrow();
+        //ToDo Cambiar por un if
         switch (order) {
             case "ASC":
-                fetchedMovies = movieRepository.findByAsoccGenresOrderByReleaseYearAsc(genre);
+                fetchedMovies = movieRepository.findByAssocGenresOrderByReleaseYearAsc(genre);
                 break;
             case "DESC":
-                fetchedMovies = movieRepository.findByAsoccGenresOrderByReleaseYearDesc(genre);
+                fetchedMovies = movieRepository.findByAssocGenresOrderByReleaseYearDesc(genre);
         }
-        fetchedMovies.forEach((fetchedMovie) -> {
-            foundMovies.add(new FoundMovie(fetchedMovie));
-        });
-        return foundMovies;
+
+        return fetchedMovies.stream().map(FoundMovie::new).collect(Collectors.toList());
     }
 
     public Movie updateMovie(MovieDto movieDto, Integer movieId) {
         Movie movieToUpdate = movieRepository.findById(movieId).orElseThrow();
         Movie updatedMovie = new Movie(movieDto, movieToUpdate);
+
         return movieRepository.save(updatedMovie);
     }
 
     public void deleteMovie(Integer movieId) {
         Movie movieToDelete = movieRepository.findById(movieId).orElseThrow();
-        movieToDelete.getAsoccCharacters().forEach((character) -> {
+        movieToDelete.getAssocCharacters().forEach((character) -> {
             character.removeMovie(movieToDelete);
             characterService.characterRepository.save(character);
         });
-        movieToDelete.getAsoccCharacters().clear();
-        movieToDelete.getAsoccGenres().forEach((genre) -> {
+        movieToDelete.getAssocCharacters().clear();
+        movieToDelete.getAssocGenres().forEach((genre) -> {
             genre.removeMovie(movieToDelete);
             genreService.genreRepository.save(genre);
         });
-        movieToDelete.getAsoccGenres().clear();
+        movieToDelete.getAssocGenres().clear();
         movieRepository.save(movieToDelete);
         movieRepository.deleteById(movieId);
     }

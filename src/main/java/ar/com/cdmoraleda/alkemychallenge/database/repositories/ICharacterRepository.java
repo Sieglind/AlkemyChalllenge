@@ -1,4 +1,4 @@
-package ar.com.cdmoraleda.alkemychallenge.security.dto.repositories;
+package ar.com.cdmoraleda.alkemychallenge.database.repositories;
 
 import ar.com.cdmoraleda.alkemychallenge.database.models.Character;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Movie;
@@ -16,5 +16,5 @@ public interface ICharacterRepository extends CrudRepository<Character, Integer>
 
     List<Character> findByWeight(String weight);
 
-    List<Character> findByAsoccMovies(Movie movie);
+    List<Character> findByAssocMovies(Movie movie);
 }

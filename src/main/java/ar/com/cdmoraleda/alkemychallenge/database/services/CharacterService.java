@@ -4,8 +4,8 @@ package ar.com.cdmoraleda.alkemychallenge.database.services;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.FoundCharacter;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Character;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Movie;
-import ar.com.cdmoraleda.alkemychallenge.security.dto.repositories.IMovieRepository;
-import ar.com.cdmoraleda.alkemychallenge.security.dto.repositories.ICharacterRepository;
+import ar.com.cdmoraleda.alkemychallenge.database.repositories.IMovieRepository;
+import ar.com.cdmoraleda.alkemychallenge.database.repositories.ICharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.CharacterDto;
 import org.springframework.stereotype.Service;
@@ -68,7 +68,7 @@ public class CharacterService {
     public List<FoundCharacter> filterByMovie(Integer movieId) {
         Movie movie = movieRepository.findById(movieId).orElseThrow();
         List<FoundCharacter> foundCharacters = new ArrayList<>();
-        List<Character> fetchedCharacters = characterRepository.findByAsoccMovies(movie);
+        List<Character> fetchedCharacters = characterRepository.findByAssocMovies(movie);
         fetchedCharacters.forEach((character) -> {
             foundCharacters.add(new FoundCharacter(character));
         });
@@ -77,11 +77,11 @@ public class CharacterService {
 
     public void deleteCharacter(Integer characterId) {
         Character characterToDelete = characterRepository.findById(characterId).orElseThrow();
-        characterToDelete.getAsoccMovies().forEach((movie) -> {
-            movie.getAsoccCharacters().remove(characterToDelete);
+        characterToDelete.getAssocMovies().forEach((movie) -> {
+            movie.getAssocCharacters().remove(characterToDelete);
             movieRepository.save(movie);
         });
-        characterToDelete.getAsoccMovies().clear();
+        characterToDelete.getAssocMovies().clear();
         characterRepository.deleteById(characterId);
     }
 }

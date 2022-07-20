@@ -32,6 +32,7 @@ a{
     position: absolute;
     top: 25%;
     right: 59px;
+    list-style: none;
 }
 
 .top-menu .login{

@@ -15,5 +15,5 @@ public class GenreDto {
     private Integer genreId;
     private String pictUrl;
     private String genreName;
-    private List<Integer> asoccMovies;
+    private List<Integer> assocMovies;
 }

@@ -32,8 +32,8 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "character_id")
     )
-    @JsonIgnoreProperties("asoccMovies")
-    private List<Character> asoccCharacters;
+    @JsonIgnoreProperties("assocMovies")
+    private List<Character> assocCharacters;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -41,16 +41,16 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    @JsonIgnoreProperties("asoccMovies")
-    private List<Genre> asoccGenres;
+    @JsonIgnoreProperties("assocMovies")
+    private List<Genre> assocGenres;
 
     public Movie(MovieDto movieDto) {
         this.pictUrl = movieDto.getPictUrl();
         this.title = movieDto.getTitle();
         this.releaseYear = movieDto.getReleaseYear();
         this.score = movieDto.getScore();
-        this.asoccCharacters = new ArrayList<>();
-        this.asoccGenres = new ArrayList<>();
+        this.assocCharacters = new ArrayList<>();
+        this.assocGenres = new ArrayList<>();
     }
 
     public Movie(MovieDto movieDto, Movie movieToUpdate) {
@@ -67,21 +67,21 @@ public class Movie {
         if (movieDto.getScore() != null) {
             this.score = movieDto.getScore();
         }
-        this.asoccCharacters = movieToUpdate.getAsoccCharacters();
+        this.assocCharacters = movieToUpdate.getAssocCharacters();
     }
 
     public void addGenre(Genre createdGenre) {
-        this.asoccGenres.add(createdGenre);
-        createdGenre.getAsoccMovies().add(this);
+        this.assocGenres.add(createdGenre);
+        createdGenre.getAssocMovies().add(this);
     }
 
     public void addCharacter(Character character) {
-        this.asoccCharacters.add(character);
-        character.getAsoccMovies().add(this);
+        this.assocCharacters.add(character);
+        character.getAssocMovies().add(this);
     }
 
     public void removeCharacter(Character character) {
-        this.asoccCharacters.remove(character);
+        this.assocCharacters.remove(character);
         character.removeMovie(this);
     }
 }

@@ -5,9 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.FoundMovie;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.MovieDto;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Movie;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/movies")
@@ -16,8 +22,8 @@ public class MovieController {
     MovieService movieService;
 
     @PostMapping
-    Movie createMovie(@RequestBody MovieDto movieDto) {
-        return movieService.createMovie(movieDto);
+    ResponseEntity<Movie> createMovie(@Valid @RequestBody MovieDto movieDto) {
+        return new ResponseEntity<>(movieService.createMovie(movieDto),CREATED);
     }
 
     @GetMapping(params = {"name"})

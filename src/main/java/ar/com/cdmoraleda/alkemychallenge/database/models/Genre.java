@@ -24,17 +24,17 @@ public class Genre {
     private String pictUrl;
     private String genreName;
 
-    @ManyToMany(mappedBy = "asoccGenres")
-    @JsonIgnoreProperties({"asoccCharacters", "asoccGenres"})
-    private List<Movie> asoccMovies;
+    @ManyToMany(mappedBy = "assocGenres")
+    @JsonIgnoreProperties({"assocCharacters", "assocGenres"})
+    private List<Movie> assocMovies;
 
     public Genre(GenreDto genreDto) {
         this.pictUrl = genreDto.getPictUrl();
         this.genreName = genreDto.getGenreName();
-        this.asoccMovies = new ArrayList<>();
+        this.assocMovies = new ArrayList<>();
     }
 
     public void removeMovie(Movie movieToDelete) {
-        this.asoccMovies.remove(movieToDelete);
+        this.assocMovies.remove(movieToDelete);
     }
 }
