@@ -1,10 +1,10 @@
 package ar.com.cdmoraleda.alkemychallenge.database.controllers;
 
-import ar.com.cdmoraleda.alkemychallenge.database.dto.FoundCharacter;
-import ar.com.cdmoraleda.alkemychallenge.database.models.Character;
 import ar.com.cdmoraleda.alkemychallenge.database.services.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.CharacterDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,32 +16,39 @@ public class CharacterController {
     CharacterService characterService;
 
     @PostMapping
-    Character createCharacter(@RequestBody CharacterDto characterDto) {
-        return characterService.createCharacter(characterDto);
+    ResponseEntity<CharacterDto> createCharacter(@RequestBody CharacterDto characterDto) {
+        return new ResponseEntity<>(characterService.createCharacter(characterDto), HttpStatus.CREATED);
     }
 
     @GetMapping(params = {"name"})
-    FoundCharacter findByName(@RequestParam String name) {
-        return characterService.findByName(name);
+    ResponseEntity<List<CharacterDto>> findByName(@RequestParam String name) {
+        return new ResponseEntity<>(characterService.findByName(name),HttpStatus.FOUND);
     }
 
     @GetMapping(params = {"age"})
-    List<FoundCharacter> filterByAge(@RequestParam Integer age) {
-        return characterService.filterByAge(age);
+    ResponseEntity<List<CharacterDto>> filterByAge(@RequestParam Integer age) {
+        return new ResponseEntity<>(characterService.filterByAge(age),HttpStatus.FOUND);
     }
 
     @GetMapping(params = {"weight"})
-    List<FoundCharacter> filterByWeight(@RequestParam String weight) {
-        return characterService.filterByWeight(weight);
+    ResponseEntity<List<CharacterDto>> filterByWeight(@RequestParam String weight) {
+        return new ResponseEntity<>(characterService.filterByWeight(weight),HttpStatus.FOUND);
+
     }
 
     @GetMapping(params = {"movieId"})
-    List<FoundCharacter> filterByMovie(@RequestParam Integer movieId) {
-        return characterService.filterByMovie(movieId);
+    ResponseEntity<List<CharacterDto>> filterByMovie(@RequestParam Integer movieId) {
+        return new ResponseEntity<>(characterService.filterByMovie(movieId),HttpStatus.FOUND);
+    }
+
+    @PutMapping
+    ResponseEntity<CharacterDto> updateCharacter(@RequestBody CharacterDto characterDto, @RequestParam Integer characterId){
+        return new ResponseEntity<>(characterService.updateCharacter(characterDto,characterId),HttpStatus.OK);
     }
 
     @DeleteMapping
-    void deleteCharacter(@RequestParam Integer characterId) {
+    ResponseEntity<String> deleteCharacter(@RequestParam Integer characterId) {
         characterService.deleteCharacter(characterId);
+        return new ResponseEntity<>("Successfully Deleted",HttpStatus.OK);
     }
 }

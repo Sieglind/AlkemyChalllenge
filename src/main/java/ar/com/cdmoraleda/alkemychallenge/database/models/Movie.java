@@ -14,12 +14,13 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
+@ToString
 
 @Entity
 @Table(name = "MOVIES")
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer movieId;
     private String pictUrl;
     private String title;
@@ -32,8 +33,8 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "character_id")
     )
-    @JsonIgnoreProperties("asoccMovies")
-    private List<Character> asoccCharacters;
+    @JsonIgnoreProperties("assocMovies")
+    private List<Character> assocCharacters;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -42,46 +43,38 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     @JsonIgnoreProperties("asoccMovies")
-    private List<Genre> asoccGenres;
+    private List<Genre> assocGenres;
 
     public Movie(MovieDto movieDto) {
         this.pictUrl = movieDto.getPictUrl();
         this.title = movieDto.getTitle();
         this.releaseYear = movieDto.getReleaseYear();
         this.score = movieDto.getScore();
-        this.asoccCharacters = new ArrayList<>();
-        this.asoccGenres = new ArrayList<>();
+        this.assocCharacters = new ArrayList<>();
+        this.assocGenres = new ArrayList<>();
     }
 
     public Movie(MovieDto movieDto, Movie movieToUpdate) {
         this.movieId = movieToUpdate.getMovieId();
-        if (movieDto.getPictUrl() != null) {
-            this.pictUrl = movieDto.getPictUrl();
-        }
-        if (movieDto.getTitle() != null) {
-            this.title = movieDto.getTitle();
-        }
-        if (movieDto.getReleaseYear() != null) {
-            this.releaseYear = movieDto.getReleaseYear();
-        }
-        if (movieDto.getScore() != null) {
-            this.score = movieDto.getScore();
-        }
-        this.asoccCharacters = movieToUpdate.getAsoccCharacters();
+        this.pictUrl = movieDto.getPictUrl();
+        this.title = movieDto.getTitle();
+        this.releaseYear = movieDto.getReleaseYear();
+        this.score = movieDto.getScore();
+        this.assocCharacters = movieToUpdate.getAssocCharacters();
     }
 
     public void addGenre(Genre createdGenre) {
-        this.asoccGenres.add(createdGenre);
-        createdGenre.getAsoccMovies().add(this);
+        this.assocGenres.add(createdGenre);
+        createdGenre.getAssocMovies().add(this);
     }
 
     public void addCharacter(Character character) {
-        this.asoccCharacters.add(character);
-        character.getAsoccMovies().add(this);
+        this.assocCharacters.add(character);
+        character.getAssocMovies().add(this);
     }
 
     public void removeCharacter(Character character) {
-        this.asoccCharacters.remove(character);
+        this.assocCharacters.remove(character);
         character.removeMovie(this);
     }
 }

@@ -4,6 +4,8 @@ import ar.com.cdmoraleda.alkemychallenge.database.dto.GenreDto;
 import ar.com.cdmoraleda.alkemychallenge.database.models.Genre;
 import ar.com.cdmoraleda.alkemychallenge.database.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +19,7 @@ public class GenreController {
     GenreService genreService;
 
     @PostMapping
-    Genre createGenre(@RequestBody GenreDto genreDto) {
-        return genreService.createGenre(genreDto);
+    ResponseEntity<Genre> createGenre(@RequestBody GenreDto genreDto) {
+        return new ResponseEntity<>(genreService.createGenre(genreDto), HttpStatus.CREATED);
     }
 }

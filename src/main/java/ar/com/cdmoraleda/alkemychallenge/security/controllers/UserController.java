@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Base64;
 
 
 @RestController
@@ -25,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping()
-    ResponseEntity<String> registerNewUser(@Valid @RequestBody ApiUserDto apiUserDto) throws IOException {
+    ResponseEntity<String> registerNewUser(@RequestBody ApiUserDto apiUserDto) throws IOException {
         System.out.println("apiUserDto = " + apiUserDto);
         return apiUserService.registerNewUser(apiUserDto);
     }
