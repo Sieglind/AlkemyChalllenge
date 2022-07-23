@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/genres")
 public class GenreController {
@@ -19,7 +21,7 @@ public class GenreController {
     GenreService genreService;
 
     @PostMapping
-    ResponseEntity<Genre> createGenre(@RequestBody GenreDto genreDto) {
+    ResponseEntity<Genre> createGenre(@Valid @RequestBody GenreDto genreDto) {
         return new ResponseEntity<>(genreService.createGenre(genreDto), HttpStatus.CREATED);
     }
 }

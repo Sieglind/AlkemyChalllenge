@@ -1,14 +1,18 @@
 package ar.com.cdmoraleda.alkemychallenge.database.controllers;
 
 import ar.com.cdmoraleda.alkemychallenge.database.services.MovieService;
+import ar.com.cdmoraleda.alkemychallenge.database.utilities.OnCreateMovie;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.MovieDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/movies")
 public class MovieController {
@@ -16,18 +20,19 @@ public class MovieController {
     MovieService movieService;
 
     @PostMapping
-    ResponseEntity<MovieDto> createMovie(@RequestBody MovieDto movieDto) {
+    @Validated(OnCreateMovie.class)
+    ResponseEntity<MovieDto> createMovie(@Valid @RequestBody MovieDto movieDto) {
         return new ResponseEntity<>(movieService.createMovie(movieDto), HttpStatus.CREATED);
     }
 
     @GetMapping(params = {"name", "order"})
-    ResponseEntity<List<MovieDto>> findMovieByTitle(@RequestParam String name,@RequestParam String order) {
-        return new ResponseEntity<>(movieService.findMovieByTitle(name,order), HttpStatus.OK);
+    ResponseEntity<List<MovieDto>> findMovieByTitle(@RequestParam String name, @RequestParam String order) {
+        return new ResponseEntity<>(movieService.findMovieByTitle(name, order), HttpStatus.OK);
     }
 
     @GetMapping(params = {"genreId", "order"})
     ResponseEntity<List<MovieDto>> filterMoviesByGenre(@RequestParam Integer genreId, @RequestParam String order) {
-        return new ResponseEntity<>(movieService.filterMoviesByGenre(genreId, order),HttpStatus.OK);
+        return new ResponseEntity<>(movieService.filterMoviesByGenre(genreId, order), HttpStatus.OK);
     }
 
     @PutMapping

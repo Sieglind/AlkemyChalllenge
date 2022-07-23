@@ -2,12 +2,15 @@ package ar.com.cdmoraleda.alkemychallenge.database.dto;
 
 import ar.com.cdmoraleda.alkemychallenge.database.models.Character;
 
+import ar.com.cdmoraleda.alkemychallenge.database.utilities.OnCreateCharacter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,12 +21,18 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CharacterDto {
     private Integer characterId;
+    @NotBlank @URL(host = "www.imdb.com")
     private String pictUrl;
+    @NotBlank
     private String name;
+    @NotNull @Min(0) @Max(100000000)
     private Integer age;
+    @NotBlank
     private String weight;
+    @NotBlank
     private String history;
-    private List<Integer> movies;
+    @NotEmpty(groups = OnCreateCharacter.class)
+    private List<@NotNull Integer> movies;
     private List<MovieDto> assocMovies;
     public CharacterDto(Character character,Boolean addAssociatedMovies) {
         this.characterId = character.getCharacterId();

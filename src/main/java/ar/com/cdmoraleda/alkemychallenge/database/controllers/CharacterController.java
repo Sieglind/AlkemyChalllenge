@@ -1,14 +1,18 @@
 package ar.com.cdmoraleda.alkemychallenge.database.controllers;
 
 import ar.com.cdmoraleda.alkemychallenge.database.services.CharacterService;
+import ar.com.cdmoraleda.alkemychallenge.database.utilities.OnCreateCharacter;
+import ar.com.cdmoraleda.alkemychallenge.database.utilities.OnCreateMovie;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.com.cdmoraleda.alkemychallenge.database.dto.CharacterDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/characters")
 public class CharacterController {
@@ -16,6 +20,7 @@ public class CharacterController {
     CharacterService characterService;
 
     @PostMapping
+    @Validated(OnCreateCharacter.class)
     ResponseEntity<CharacterDto> createCharacter(@RequestBody CharacterDto characterDto) {
         return new ResponseEntity<>(characterService.createCharacter(characterDto), HttpStatus.CREATED);
     }
