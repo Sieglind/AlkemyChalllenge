@@ -1,0 +1,929 @@
+openapi: 3.0.1
+info:
+  title: Alkemy Challenge API - Disney
+  description: A basic REST API created for Alkemy's July 2022 - Java Backend Challenge</br>The database can be accessed through <a href=http://localhost:8080/h2/ target=_blank >this</a> link
+  version: v1.0
+servers:
+  - url: http://localhost:8080/
+    description: Generated server URL
+paths:
+  /auth/register:
+    post:
+      summary: Allows the registration of users and sends a welcoming email to the new user
+      tags:
+        - user-controller
+      operationId: registerNewUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUserDto'
+            example:
+              name: Siegmeyer of Catarina
+              email: onionKnight@alkemyapi.com
+              username: AnUsername
+              password: 1234-Password
+        required: true
+      responses:
+        '200':
+          description: The user has been successfully registered
+          content:
+            '*/*':
+              example:
+                User successfully registered
+        '409':
+          description: Bad Request
+          content:
+            '*/*':
+              examples:
+                Already used email:
+                  value:
+                    Email already in use
+                Already used username:
+                  value:
+                    Username already use
+  /auth/login:
+    post:
+      summary: Allows the client to authenticate using the credentials provided in the body as a JSON. Returns a token to use in the authorization headers of all requests sent to the endpoints:"/movies","/characters","genres"
+      tags:
+        - user-controller
+      operationId: userLogin
+      requestBody:
+        description: Authentication credentials
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: Username
+                password:
+                  type: string
+                  description: Password
+        required: true
+      responses:
+        '200':
+          description: After a successful authentication, the API returns a toke to the client
+          content:
+            '*/*':
+              example:
+                refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJFYXJsZG9tIiwiUk9MRVMiOlsiUk9MRV9VU0VSIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hdXRoL2xvZ2luIiwiZXhwIjoxNjU4Nzc3NjM0fQ.3jCnWnblcTOdAgmK4lvjTvoQl2r2anGVeSbZxukC19I
+        '400':
+          description: If the credentials are invalid, no token is provided
+          content:
+            '*/*':
+              example:
+                timestamp: '2022-07-25T19:25:15.315+00:00'
+                status: 401
+                error: Unauthorized
+                path: /auth/login
+
+
+  /movies:
+    post:
+      security:
+        - BearerAuth: []
+      summary: Creates a new Movie in the Database provided a JSON body in the correct format
+      tags:
+        - movie-controller
+      operationId: createMovie
+      requestBody:
+        description: The JSON representation of a MovieDto object with it's associated movies
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieDto'
+            examples:
+              Correct Body Format:
+                description: This is the correct format for the request body
+                value:
+                  pictUrl: https://www.imdb.com/title/tt0114709/
+                  title: Toy Story
+                  releaseYear: '1995'
+                  score: 8
+                  assocCharacters:
+                    - pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000158?ref_=ttfc_fc_cl_t1
+                      name: Woody
+                      age: '35'
+                      weight: Protagonist
+                      history: One of Andy's old toys
+                    - pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000741?ref_=ttfc_fc_cl_t2
+                      name: Buzz Lightyear
+                      age: '30'
+                      weight: Protagonist
+                      history: Andy's new toy
+              Incorrect Body Format:
+                description: In this request, the title is empty, the score is null and the releaseYear out of range
+                value:
+                  pictUrl: https://www.imdb.com/title/tt0114709/
+                  title: ''
+                  releaseYear: '3000'
+                  assocCharacters:
+                    - pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000158?ref_=ttfc_fc_cl_t1
+                      name: Woody
+                      age: '35'
+                      weight: Protagonist
+                      history: One of Andy's old toys
+                    - pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000741?ref_=ttfc_fc_cl_t2
+                      name: Buzz Lightyear
+                      age: '30'
+                      weight: Protagonist
+                      history: Andy's new toy
+        required: true
+      responses:
+        '200':
+          description: "The saved movie is returned in JSON format, including its associated characters"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MovieDto'
+              example:
+                movieId: 1
+                pictUrl: https://www.imdb.com/title/tt0114709/
+                title: Toy Story
+                releaseYear: 1995
+                score: 8
+                assocCharacters:
+                  - characterId: 1
+                    pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000158?ref_=ttfc_fc_cl_t1
+                    name: Woody
+                    age: 35
+                    weight: Protagonist
+                    history: One of Andy's old toys
+                  - characterId: 2
+                    pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000741?ref_=ttfc_fc_cl_t2
+                    name: Buzz Lightyear
+                    age: 30
+                    weight: Protagonist
+                    history: Andy's new toy
+
+        '400':
+          description: 'Response to an incorrect body format'
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              example:
+                score: Must not be null
+                title: Must provide a title
+                releaseYear: Release year must be before 2050
+    get:
+      security:
+        - BearerAuth: []
+      summary: Searches for movies containing the "name" parameter in its name or belonging to the genre indicated by "genreId", sorting results depending on the parameter "order" which should  be ASC or DESC (not case sensitive). If no arguments are provided for the first two parameters, all movies will be returned
+      tags:
+        - movie-controller
+      operationId: findMovieByTitle
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: Which String to look for when searching by name
+          schema:
+            type: string
+        - name: genreId
+          in: query
+          required: false
+          description: The id of the genre we want to use to filter the results
+          schema:
+            type: integer
+            format: int32
+        - name: order
+          in: query
+          required: false
+          description: The order in which we want to se see the results, can be "ASC","DESC", null or empty
+          schema:
+            type: string
+      responses:
+        '200':
+          description: After a successful search the results are given in JSON format
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieDto'
+              example:
+                - pictUrl: https://www.imdb.com/title/tt0114709/
+                  title: Toy Story
+                  releaseYear: 1995
+                - pictUrl: https://www.imdb.com/title/tt0120363/
+                  title: Toy Story 2
+                  releaseYear: 1999
+                - pictUrl: https://www.imdb.com/title/tt0435761/
+                  title: Toy Story 3
+                  releaseYear: 2010
+
+        '400':
+          description: An incorrect value for the "oder" parameter was given
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              examples:
+                Incorrect "order" value:
+                  description: The order parameter was other than "ASD" or "DESC"
+                  value:
+                    error_message: 'Request processing failed; nested exception is java.lang.IllegalArgumentException: Invalid value ''nothing'' for orders given; Has to be either ''desc'' or ''asc'' (case insensitive)'
+                Incorrect "genreId" value:
+                  description: The given "genreId" doest not correspond to an entry in the database
+                  value:
+                    error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+    put:
+      security:
+        - BearerAuth: []
+      summary: Update the movie whose id corresponds to the parameter "movieId", with the values from the JSON included in the request body
+      tags:
+        - movie-controller
+      operationId: updateMovie
+      parameters:
+        - name: movieId
+          in: query
+          required: true
+          description: The id of the movie to update
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: 'The fields to update must only include: "pictUrl","title","releaseYear" and "score"'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieDto'
+            examples:
+              Correct Body Format:
+                description: An update request in which the "releaseYear" is being updated to 1996
+                value:
+                  pictUrl: https://www.imdb.com/title/tt0114709/
+                  title: Toy Story
+                  releaseYear: 1996
+                  score: 8
+              Incorrect JSON property:
+                description: Here the client tries to update and add associated character
+                value:
+                  pictUrl: https://www.imdb.com/title/tt0114709/
+                  title: Toy Story
+                  releaseYear: 1996
+                  score: 8
+                  assocCharacters:
+                    - pictUrl: https://www.imdb.com/title/tt0435761/characters/nm0001728?ref_=ttfc_fc_cl_t7
+                      name: Rex
+                      age: 65000000
+                      weight: Secondary
+                      history: One of Andy's original toys
+        required: true
+      responses:
+        '200':
+          description: After a successful update, the entire movie is returned, including it's associated characters
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MovieDto'
+              example:
+                movieId: 3
+                pictUrl: https://www.imdb.com/title/tt0114709/
+                title: Toy Story
+                releaseYear: 1996
+                score: 8
+                assocCharacters:
+                  - characterId: 1
+                    pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000158?ref_=ttfc_fc_cl_t1
+                    name: Woody
+                    age: 35
+                    weight: Protagonist
+                    history: One of Andy's old toys
+                  - characterId: 2
+                    pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000741?ref_=ttfc_fc_cl_t2
+                    name: Buzz Lightyear
+                    age: 30
+                    weight: Protagonist
+                    history: One of Andy's toys
+
+        '400':
+          description: Errors on the parameters or the body
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              examples:
+                Incorrect JSON property:
+                  description: The client tried to update the associated character of a movie
+                  value:
+                    "error_message": "Request processing failed; nested exception is javax.validation.ConstraintViolationException: updateMovie.movieDto.assocCharacters: Asocc characters shall not be updated thru this method"
+                Incorrect "movieId" value:
+                  description: The given "movieId" doesn't correspond to an entry in the database
+                  value:
+                    error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+    delete:
+      security:
+        - BearerAuth: []
+      summary: Given a "movieId", deletes the corresponding entry on the Movies database
+      tags:
+        - movie-controller
+      operationId: deleteMovie
+      parameters:
+        - name: movieId
+          in: query
+          required: true
+          description: The id necessary to perform the deletion from the database
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+              example:
+                Successfully Deleted
+        '403':
+          description: The given "movieId" doesn't correspond to an entry in the database
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              example:
+                error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+
+  /movies/{movieId}/characters/{characterId}:
+    post:
+      security:
+        - BearerAuth: []
+      summary: Finds a movie identified by the "movieId" parameter and adds a previously created character identified by the "characterId" parameter to it's list of associated characters
+      tags:
+        - movie-controller
+      operationId: addCharacterToMovie
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          description: Identifies the movie to be modified
+          schema:
+            type: integer
+            format: int32
+        - name: characterId
+          in: path
+          required: true
+          description: Identifies the character to be added
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+              example:
+                Character successfully added
+        '400':
+          description: 'Error example: the given "movieId","characterId" o both do not correspond to an entry in the database'
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              example:
+                error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+    delete:
+      security:
+        - BearerAuth: []
+      summary: Finds a movie identified by the "movieId" parameter and removes a previously created character identified by the "characterId" parameter from it's list of associated characters
+      tags:
+        - movie-controller
+      operationId: removeCharacterFromMovie
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          description: Identifies the movie to be modified
+          schema:
+            type: integer
+            format: int32
+        - name: characterId
+          in: path
+          required: true
+          description: Identifies the character to be removed
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+              example:
+                Character successfully removed
+        '400':
+          description: 'Error example: the given "movieId","characterId" o both do not correspond to an entry in the database'
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              example:
+                error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+
+  /characters:
+    post:
+      security:
+        - BearerAuth: []
+      summary: Creates a new Character in the Database provided a JSON body in the correct format
+      tags:
+        - character-controller
+      operationId: createCharacter
+      requestBody:
+        description: The JSON representation of a characterDto object with an array of movieIds where the character appears and null assocMovies
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacterDto'
+            examples:
+              Correct Body Format:
+                description: This is the correct format for the  request body
+                value:
+                  pictUrl: https://www.imdb.com/title/tt0435761/characters/nm0001728?ref_=ttfc_fc_cl_t7
+                  name: Rex
+                  age: 65000000
+                  weight: Secondary
+                  history: One of Andy's original toys
+                  movies:
+                    - 1
+                    - 2
+              Incorrect Body Format:
+                description: In this request the name was left empty and the age is null
+                value:
+                  pictUrl: https://www.imdb.com/title/tt0435761/characters/nm0001728?ref_=ttfc_fc_cl_t7
+                  name: ''
+                  weight: Secondary
+                  history: One of Andy's original toys
+                  movies:
+                    - 1
+                    - 2
+        required: true
+      responses:
+        '200':
+          description: The saved character is returned in JSON format, including its associated movies
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CharacterDto'
+              example:
+                characterId: 11
+                pictUrl: https://www.imdb.com/title/tt0435761/characters/nm0001728?ref_=ttfc_fc_cl_t7
+                name: Rex
+                age: 65000000
+                weight: Secondary
+                history: One of Andy's original toys
+                assocMovies:
+                  - movieId: 1
+                    pictUrl: https://www.imdb.com/title/tt0120363/
+                    title: Toy Story 2
+                    releaseYear: 1999
+                    score: 7
+                  - movieId: 2
+                    pictUrl: https://www.imdb.com/title/tt0435761/
+                    title: Toy Story 3
+                    releaseYear: 2010
+                    score: 8
+
+        '400':
+          description: Response to an incorrect body format
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              example:
+                name: Must provide a name
+                age: Must provide an age
+    get:
+      security:
+        - BearerAuth: []
+      summary: "Searches for characters by name or filters by character weight,movie where it's present or the character's age. The search and filter priority is predetermined as follows: name > weight > movieId > age. If no values are provided for the parameter, all characters in the database will be returned"
+      tags:
+        - character-controller
+      operationId: findBy
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: Which String to look for when searching by name
+          schema:
+            type: string
+        - name: weight
+          in: query
+          required: false
+          description: The character's weight we want to filter for
+          schema:
+            type: string
+        - name: movieId
+          in: query
+          required: false
+          description: The id of the movie we want to use to filter the results
+          schema:
+            type: integer
+            format: int32
+        - name: age
+          in: query
+          required: false
+          description: The character's age we want to filter for
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: The search returns the name and IMDb link for the found characters in a JSON
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CharacterDto'
+              example:
+                - pictUrl: https://www.imdb.com/title/tt0114709/characters/nm0000158?ref_=ttfc_fc_cl_t1
+                  name: Woody
+
+        '400':
+          description: The given "movieId" doest not correspond to an entry in the database
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                example:
+                  error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+    put:
+      security:
+        - BearerAuth: []
+      summary: Updates the character whose id corresponds to the parameter "characterid", with the values from the JSON included in the request body
+      tags:
+        - character-controller
+      operationId: updateCharacter
+      parameters:
+        - name: characterId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: 'The fields to update must only include: "pictUrl","name","age","weight" and "history"'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacterDto'
+            examples:
+              Correct Body Format:
+                description: An update request in which the "weight" is being updated to "Protagonist"
+                value:
+                  pictUrl: https://www.imdb.com/title/tt0435761/characters/nm0001728?ref_=ttfc_fc_cl_t7
+                  name: Rex
+                  age: 65000000
+                  weight: Protagonist
+                  history: One of Andy's original toys
+              Incorrect Body Format:
+                description: Here the client tries to update and add associated character
+                value:
+                  pictUrl: https://www.imdb.com/title/tt0435761/characters/nm0001728?ref_=ttfc_fc_cl_t7
+                  name: 'Rex'
+                  age: 65000000
+                  weight: Protagonist
+                  history: One of Andy's original toys
+                  movies:
+                    - 6
+
+        required: true
+      responses:
+        '200':
+          description: After a successful update, the entire character is returned, including it's associated movies
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CharacterDto'
+              example:
+                characterId: 11
+                pictUrl: https://www.imdb.com/title/tt0435761/characters/nm0001728?ref_=ttfc_fc_cl_t7
+                name: Rex
+                age: 65000000
+                weight: Protagonist
+                history: One of Andy's original toys
+                assocMovies:
+                  - movieId: 1
+                    pictUrl: https://www.imdb.com/title/tt0120363/
+                    title: Toy Story 2
+                    releaseYear: 1999
+                    score: 7
+                  - movieId: 2
+                    pictUrl: https://www.imdb.com/title/tt0435761/
+                    title: Toy Story 3
+                    releaseYear: 2010
+                    score: 8
+
+        '400':
+          description: Response to an incorrect body format
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              examples:
+                Incorrect JSON property:
+                  description: The client tried to update the associated movies of a character
+                  value:
+                    error_message: 'Request processing failed; nested exception is javax.validation.ConstraintViolationException: updateCharacter.characterDto.movies: Associated movies shall not be added through this method'
+                Incorrect "characterId" value:
+                  description: The given "characterId" doesn't correspond to an entry in the database
+                  value:
+                    error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+    delete:
+      security:
+        - BearerAuth: []
+      summary: Given a "characterId", deletes the corresponding entry on the Characters database
+      tags:
+        - character-controller
+      operationId: deleteCharacter
+      parameters:
+        - name: characterId
+          in: query
+          required: true
+          description: The id necessary to perform the deletion from the database
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+              example:
+                Successfully Deleted
+        '400':
+          description: The given "characterId" doesn't correspond to an entry in the database
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+              example:
+                error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+
+  /genres:
+    post:
+      security:
+        - BearerAuth: []
+      summary: Creates a new genre in the database provided a JSON in the correct format
+      tags:
+        - genre-controller
+      operationId: createGenre
+      requestBody:
+        description: The expected body for request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenreDto'
+            example:
+              pictUrl: https://www.imdb.com/search/title/?genres=adventure&explore=title_type,genres&ref_=tt_ov_inf
+              genreName: Adventure
+              assocMovies:
+                - 1
+                - 2
+                - 3
+
+        required: true
+      responses:
+        '200':
+          description: The saved genre is returned in JSON format, including  it's associated characters
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Genre'
+              example:
+                genreId: 1
+                pictUrl: https://www.imdb.com/search/title/?genres=adventure&explore=title_type,genres&ref_=tt_ov_inf
+                genreName: Adventure
+                assocMovies:
+                  - movieId: 1
+                    pictUrl: https://www.imdb.com/title/tt0120363/
+                    title: Toy Story 2
+                    releaseYear: 1999
+                    score: 7
+                  - movieId: 2
+                    pictUrl: https://www.imdb.com/title/tt0435761/
+                    title: Toy Story 3
+                    releaseYear: 2010
+                    score: 8
+                  - movieId: 3
+                    pictUrl: https://www.imdb.com/title/tt0114709/
+                    title: Toy Story
+                    releaseYear: 1995
+                    score: 8
+
+        '400':
+          description: One or more of the given movie ids do not correspond to an entry in the database
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                example:
+                  error_message: 'Request processing failed; nested exception is java.util.NoSuchElementException: No value present'
+components:
+  schemas:
+    CharacterDto:
+      required:
+        - age
+        - history
+        - movies
+        - name
+        - pictUrl
+        - weight
+      type: object
+      properties:
+        characterId:
+          type: integer
+          format: int32
+        pictUrl:
+          type: string
+        name:
+          type: string
+        age:
+          maximum: 100000000
+          minimum: 1
+          type: integer
+          format: int32
+        weight:
+          type: string
+        history:
+          type: string
+        movies:
+          type: array
+          items:
+            type: integer
+            format: int32
+        assocMovies:
+          type: array
+          items:
+            $ref: '#/components/schemas/MovieDto'
+    MovieDto:
+      required:
+        - assocCharacters
+        - pictUrl
+        - releaseYear
+        - score
+        - title
+      type: object
+      properties:
+        movieId:
+          type: integer
+          format: int32
+        pictUrl:
+          type: string
+        title:
+          type: string
+        releaseYear:
+          maximum: 2050
+          minimum: 1937
+          type: integer
+          format: int32
+        score:
+          maximum: 10
+          minimum: 0
+          type: integer
+          format: int32
+        assocCharacters:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacterDto'
+    GenreDto:
+      required:
+        - pictUrl
+      type: object
+      properties:
+        genreId:
+          type: integer
+          format: int32
+        pictUrl:
+          type: string
+        genreName:
+          type: string
+        assocMovies:
+          type: array
+          items:
+            type: integer
+            format: int32
+    Character:
+      type: object
+      properties:
+        characterId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        pictUrl:
+          type: string
+        age:
+          type: integer
+          format: int32
+        weight:
+          type: string
+        history:
+          type: string
+        assocMovies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Movie'
+    Genre:
+      type: object
+      properties:
+        genreId:
+          type: integer
+          format: int32
+        pictUrl:
+          type: string
+        genreName:
+          type: string
+        assocMovies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Movie'
+    Movie:
+      type: object
+      properties:
+        movieId:
+          type: integer
+          format: int32
+        pictUrl:
+          type: string
+        title:
+          type: string
+        releaseYear:
+          type: integer
+          format: int32
+        score:
+          type: integer
+          format: int32
+        assocCharacters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Character'
+        assocGenres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+    ApiUserDto:
+      required:
+        - email
+        - name
+        - password
+        - userName
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        userName:
+          type: string
+        password:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+tags:
+  - name: user-controller
+    description: User registration and authentication
+  - name: movie-controller
+    description: Movie related CRUD operations and Movie/Character relation management
+  - name: character-controller
+    description: Character related CRUD operations
+  - name: genre-controller
+    description: Genre creation

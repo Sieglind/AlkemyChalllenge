@@ -28,6 +28,12 @@ a{
     left: 10px;
 }
 
+.top-menu .documentation{
+    position: absolute;
+    top: 25%;
+    left: 150px;
+}
+
 .top-menu .register{
     position: absolute;
     top: 25%;
