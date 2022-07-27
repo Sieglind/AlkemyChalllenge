@@ -39,4 +39,4 @@ Tambien tiene a su disposicion un rudimentario frontend, que fue creado para tes
 <a href=http://localhost:8080/> Alkemy Challenge API - Disney </a>
 
 Los requerimientos tecnicos para el desarrollo de este proyecto se pueden consultar 
-<a href="/Challenge Backend - Java Spring Boot(API).pdf">aqui</a>
+<a href="/Challenge Backend - Java Spring Boot (API).pdf">aqui</a>
