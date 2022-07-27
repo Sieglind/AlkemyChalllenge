@@ -4,7 +4,6 @@ import ar.com.cdmoraleda.alkemychallenge.dto.CharacterDto;
 import ar.com.cdmoraleda.alkemychallenge.models.Character;
 import ar.com.cdmoraleda.alkemychallenge.models.Movie;
 
-import java.util.List;
 import java.util.Set;
 
 

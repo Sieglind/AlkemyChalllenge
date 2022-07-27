@@ -5,7 +5,6 @@ import ar.com.cdmoraleda.alkemychallenge.models.Character;
 
 import ar.com.cdmoraleda.alkemychallenge.utilities.OnCreateCharacter;
 import ar.com.cdmoraleda.alkemychallenge.utilities.OnUpdateCharacter;
-import ar.com.cdmoraleda.alkemychallenge.utilities.OnUpdateMovie;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,6 @@ import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.*;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

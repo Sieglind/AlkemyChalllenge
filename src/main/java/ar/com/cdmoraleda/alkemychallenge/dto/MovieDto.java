@@ -12,7 +12,6 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
