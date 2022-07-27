@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Validated
 @RestController
@@ -27,7 +28,7 @@ public class MovieController {
     }
 
     @GetMapping
-    ResponseEntity<List<MovieDto>> findMovieByTitle(
+    ResponseEntity<Set<MovieDto>> findMovieByTitle(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer genreId,
             @RequestParam(required = false) String order) {

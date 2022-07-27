@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Validated
 @RestController
@@ -28,7 +29,7 @@ public class CharacterController {
     }
 
     @GetMapping
-    ResponseEntity<List<CharacterDto>> findBy(@RequestParam(required = false) String name,
+    ResponseEntity<Set<CharacterDto>> findBy(@RequestParam(required = false) String name,
                                              @RequestParam(required = false) Integer age,
                                              @RequestParam(required = false) String weight,
                                              @RequestParam(required = false) Integer movieId){

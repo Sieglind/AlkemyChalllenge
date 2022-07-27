@@ -7,7 +7,7 @@ loginForm.addEventListener("submit", async (e) => {
         let data = new FormData(form);
         let userName = data.get("userName").toString();
         let password = data.get("password").toString();
-        let bodyContent = "userName=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password);
+        let bodyContent = "username=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password);
         let response = await postFromFieldsAsJson({url,bodyContent});
         if (response.ok){
             let tokens = await response.json();

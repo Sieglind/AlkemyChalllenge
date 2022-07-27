@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.*;
 
@@ -28,7 +30,7 @@ public class Character {
     private String history;
     @ManyToMany(mappedBy = "assocCharacters")
     @JsonIgnoreProperties({"assocCharacters", "assocGenres"})
-    private List<Movie> assocMovies;
+    private Set<Movie> assocMovies;
 
     public Character(CharacterDto characterDto) {
         this.name = characterDto.getName();
@@ -36,7 +38,7 @@ public class Character {
         this.age = characterDto.getAge();
         this.weight = characterDto.getWeight();
         this.history = characterDto.getHistory();
-        this.assocMovies = new ArrayList<>();
+        this.assocMovies = new HashSet<>();
     }
 
     public Character(CharacterDto characterDto, Character characterToUpdate) {

@@ -5,7 +5,9 @@ import ar.com.cdmoraleda.alkemychallenge.dto.GenreDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.*;
 
@@ -26,12 +28,12 @@ public class Genre {
 
     @ManyToMany(mappedBy = "assocGenres")
     @JsonIgnoreProperties({"assocCharacters", "assocGenres"})
-    private List<Movie> assocMovies;
+    private Set<Movie> assocMovies;
 
     public Genre(GenreDto genreDto) {
         this.pictUrl = genreDto.getPictUrl();
         this.genreName = genreDto.getGenreName();
-        this.assocMovies = new ArrayList<>();
+        this.assocMovies = new HashSet<>();
     }
 
     public void removeMovie(Movie movieToDelete) {

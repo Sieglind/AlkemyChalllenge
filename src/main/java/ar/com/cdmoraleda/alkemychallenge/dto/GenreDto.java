@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -21,5 +22,5 @@ public class GenreDto {
     @URL(host = "www.imdb.com", message = "Must provide a link from IMBd")
     private String pictUrl;
     private String genreName;
-    private List<Integer> assocMovies;
+    private Set<Integer> assocMovies;
 }

@@ -28,15 +28,13 @@ public class MovieServiceImplementation implements MovieService {
             return movieDto;
         }
         Movie savedMovie = movieRepository.save(new Movie(movieDto));
-        movieDto.getAssocCharacters().forEach((characterDto) -> {
-            characterService.createCharacter(characterDto, savedMovie);
-        });
+        movieDto.getAssocCharacters().forEach((characterDto) -> characterService.createCharacter(characterDto, savedMovie));
         return new MovieDto(movieRepository.save(savedMovie), true);
     }
 
-    public List<MovieDto> findBy(String name, Integer genreId, String order) {
+    public Set<MovieDto> findBy(String name, Integer genreId, String order) {
         Genre genre = genreService.findById(genreId);
-        List<Movie> movies;
+        Set<Movie> movies;
         if (order == null || order.isBlank()) {
             if (genre == null) {
                 movies = movieRepository.findByTitleContaining(name);
@@ -54,7 +52,7 @@ public class MovieServiceImplementation implements MovieService {
                 movies = movieRepository.findByTitleContainingAndAssocGenres(name, genre, Sort.by(Sort.Direction.fromString(order), "releaseYear"));
             }
         }
-        return movies.stream().map(MovieDto::new).collect(Collectors.toList());
+        return movies.stream().map(MovieDto::new).collect(Collectors.toSet());
     }
 
     public MovieDto updateMovie(MovieDto movieDto, Integer movieId) {

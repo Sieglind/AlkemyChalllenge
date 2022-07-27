@@ -10,6 +10,7 @@ import ar.com.cdmoraleda.alkemychallenge.dto.CharacterDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +42,7 @@ public class CharacterServiceImplementation implements CharacterService {
         characterRepository.save(savedCharacter);
     }
 
-    public List<CharacterDto> findBy(String name, Integer age, String weight, Integer movieId) {
+    public Set<CharacterDto> findBy(String name, Integer age, String weight, Integer movieId) {
         if (name != null && !name.isBlank()) return toDto(characterRepository.findByNameContaining(name));
         else if (weight != null  && !weight.isBlank()) return toDto(characterRepository.findByWeight(weight));
         else if (movieId != null) {
@@ -49,7 +50,7 @@ public class CharacterServiceImplementation implements CharacterService {
             return toDto(characterRepository.findByAssocMovies(movie));
         }
         else if (age != null) return toDto(characterRepository.findByAge(age));
-        else return toDto((List<Character>) characterRepository.findAll());
+        else return toDto((Set<Character>) characterRepository.findAll());
     }
 
     public CharacterDto updateCharacter(CharacterDto characterDto, Integer characterId) {
@@ -76,7 +77,7 @@ public class CharacterServiceImplementation implements CharacterService {
         return characterRepository.findById(characterId).orElseThrow();
     }
 
-    public List<CharacterDto> toDto(List<Character> characters) {
-        return characters.stream().map(CharacterDto::new).collect(Collectors.toList());
+    public Set<CharacterDto> toDto(Set<Character> characters) {
+        return characters.stream().map(CharacterDto::new).collect(Collectors.toSet());
     }
 }

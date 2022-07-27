@@ -13,6 +13,7 @@ import org.hibernate.validator.constraints.URL;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -42,7 +43,7 @@ public class MovieDto {
 
     @NotEmpty(groups = OnCreateMovie.class, message = "Please add at least one character to the movie")
     @Null(groups = OnUpdateMovie.class, message = "Associated characters shall not be updated through this method")
-    private List<@Valid CharacterDto> assocCharacters;
+    private Set<@Valid CharacterDto> assocCharacters;
 
     public MovieDto(Movie movie, Boolean addAssociatedCharacters) {
         this.movieId = movie.getMovieId();
@@ -53,7 +54,7 @@ public class MovieDto {
         if (addAssociatedCharacters) {
             this.assocCharacters = movie.getAssocCharacters().stream()
                     .map(character -> new CharacterDto(character, false))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
         }
     }
 

@@ -7,13 +7,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Repository
 public interface ICharacterRepository extends CrudRepository<Character, Integer> {
     Optional<Character> findByName(String name);
-    List<Character> findByNameContaining(String name);
-    List<Character> findByAge(Integer age);
-    List<Character> findByWeight(String weight);
-    List<Character> findByAssocMovies(Movie movie);
+    Set<Character> findByNameContaining(String name);
+    Set<Character> findByAge(Integer age);
+    Set<Character> findByWeight(String weight);
+    Set<Character> findByAssocMovies(Movie movie);
 }

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.*;
 
@@ -14,7 +16,6 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-@ToString
 
 @Entity
 @Table(name = "MOVIES")
@@ -34,7 +35,7 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "character_id")
     )
     @JsonIgnoreProperties("assocMovies")
-    private List<Character> assocCharacters;
+    private Set<Character> assocCharacters;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -43,15 +44,15 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     @JsonIgnoreProperties("asoccMovies")
-    private List<Genre> assocGenres;
+    private Set<Genre> assocGenres;
 
     public Movie(MovieDto movieDto) {
         this.pictUrl = movieDto.getPictUrl();
         this.title = movieDto.getTitle();
         this.releaseYear = movieDto.getReleaseYear();
         this.score = movieDto.getScore();
-        this.assocCharacters = new ArrayList<>();
-        this.assocGenres = new ArrayList<>();
+        this.assocCharacters = new HashSet<>();
+        this.assocGenres = new HashSet<>();
     }
 
     public Movie(MovieDto movieDto, Movie movieToUpdate) {
