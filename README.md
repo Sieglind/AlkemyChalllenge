@@ -41,7 +41,7 @@ Para poder ejecutar este proyecto desde su equipo, debera tener instalados Maven
 
 1. Clonar el proyecto:
 
-<code> $ ht<span>tps://github.com/Sieglind/AlkemyChalllenge.git </code>
+<code> $ ht<span>tps://</span>github.com/Sieglind/AlkemyChalllenge.git </code>
 
 2. Ir al directorio del proyecto:
 
