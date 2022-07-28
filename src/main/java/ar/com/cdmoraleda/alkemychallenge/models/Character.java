@@ -56,5 +56,6 @@ public class Character {
 
     public void removeMovie(Movie movie) {
         this.assocMovies.remove(movie);
+        movie.getAssocCharacters().remove(this);
     }
 }

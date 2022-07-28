@@ -43,12 +43,11 @@ public class CharacterServiceImplementation implements CharacterService {
 
     public Set<CharacterDto> findBy(String name, Integer age, String weight, Integer movieId) {
         if (name != null && !name.isBlank()) return toDto(characterRepository.findByNameContaining(name));
-        else if (weight != null  && !weight.isBlank()) return toDto(characterRepository.findByWeight(weight));
+        else if (weight != null && !weight.isBlank()) return toDto(characterRepository.findByWeight(weight));
         else if (movieId != null) {
             Movie movie = movieRepository.findById(movieId).get();
             return toDto(characterRepository.findByAssocMovies(movie));
-        }
-        else if (age != null) return toDto(characterRepository.findByAge(age));
+        } else if (age != null) return toDto(characterRepository.findByAge(age));
         else return toDto((Set<Character>) characterRepository.findAll());
     }
 
@@ -60,11 +59,12 @@ public class CharacterServiceImplementation implements CharacterService {
 
     public void deleteCharacter(Integer characterId) {
         Character characterToDelete = characterRepository.findById(characterId).orElseThrow();
-        characterToDelete.getAssocMovies().forEach((movie) -> {
-            movie.getAssocCharacters().remove(characterToDelete);
+        for (int i = characterToDelete.getAssocMovies().size(); i > 0; i--){
+            Movie movie = characterToDelete.getAssocMovies().iterator().next();
+            movie.removeCharacter(characterToDelete);
             movieRepository.save(movie);
-        });
-        characterToDelete.getAssocMovies().clear();
+        }
+            characterToDelete.getAssocMovies().clear();
         characterRepository.deleteById(characterId);
     }
 

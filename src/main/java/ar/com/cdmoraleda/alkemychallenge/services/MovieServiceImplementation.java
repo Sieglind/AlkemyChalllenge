@@ -45,7 +45,7 @@ public class MovieServiceImplementation implements MovieService {
             }
         } else {
             if (genre == null) {
-                movies = movieRepository.findByTitleContaining(name,Sort.by(Sort.Direction.fromString(order), "releaseYear"));
+                movies = movieRepository.findByTitleContaining(name, Sort.by(Sort.Direction.fromString(order), "releaseYear"));
             } else if (name == null || name.isBlank()) {
                 movies = movieRepository.findByAssocGenres(genre, Sort.by(Sort.Direction.fromString(order), "releaseYear"));
             } else {
@@ -62,16 +62,16 @@ public class MovieServiceImplementation implements MovieService {
 
     public void deleteMovie(Integer movieId) {
         Movie movieToDelete = movieRepository.findById(movieId).orElseThrow();
-        movieToDelete.getAssocCharacters().forEach((character) -> {
+        for (int i = movieToDelete.getAssocCharacters().size(); i > 0; i--) {
+            Character character = movieToDelete.getAssocCharacters().iterator().next();
             character.removeMovie(movieToDelete);
             characterService.save(character);
-        });
-        movieToDelete.getAssocCharacters().clear();
-        movieToDelete.getAssocGenres().forEach((genre) -> {
+        }
+        for (int i = movieToDelete.getAssocGenres().size(); i > 0; i--){
+            Genre genre = movieToDelete.getAssocGenres().iterator().next();
             genre.removeMovie(movieToDelete);
             genreService.save(genre);
-        });
-        movieToDelete.getAssocGenres().clear();
+        }
         movieRepository.save(movieToDelete);
         movieRepository.deleteById(movieId);
     }

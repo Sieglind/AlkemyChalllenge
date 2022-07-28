@@ -62,11 +62,6 @@ public class Movie {
         this.assocCharacters = movieToUpdate.getAssocCharacters();
     }
 
-    public void addGenre(Genre createdGenre) {
-        this.assocGenres.add(createdGenre);
-        createdGenre.getAssocMovies().add(this);
-    }
-
     public void addCharacter(Character character) {
         this.assocCharacters.add(character);
         character.getAssocMovies().add(this);
@@ -74,6 +69,11 @@ public class Movie {
 
     public void removeCharacter(Character character) {
         this.assocCharacters.remove(character);
-        character.removeMovie(this);
+        character.getAssocMovies().remove(this);
+    }
+
+    public void addGenre(Genre createdGenre) {
+        this.assocGenres.add(createdGenre);
+        createdGenre.getAssocMovies().add(this);
     }
 }

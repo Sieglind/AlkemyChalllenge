@@ -36,5 +36,6 @@ public class Genre {
 
     public void removeMovie(Movie movieToDelete) {
         this.assocMovies.remove(movieToDelete);
+        movieToDelete.getAssocGenres().remove(this);
     }
 }
