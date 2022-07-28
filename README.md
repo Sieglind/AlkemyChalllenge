@@ -37,7 +37,7 @@
 
 ### Ejecuccion del Proyecto
 
-Para poder ejecutar este proyecto desde su equipo, debera tener instalados Maven y Java 15.0.2 y seguir los siguientes pasos
+Para poder ejecutar este proyecto desde su equipo, debera tener instalados Maven, Java 15.0.2 y seguir los siguientes pasos
 
 1. Clonar el proyecto:
 
@@ -67,4 +67,4 @@ También tiene a su disposición un rudimentario frontend, que fue creado para t
 <a href=http://localhost:8080/> Alkemy Challenge API - Disney </a>
 
 Los requerimientos técnicos para el desarrollo de este proyecto se pueden consultar
-<a href="/Challenge Backend - Java Spring Boot (API).pdf">aqui</a>
+<a href="/Challenge Backend - Java Spring Boot (API).pdf" target=_blank>aqui</a>
