@@ -9,14 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class AlkemyChallengeApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(AlkemyChallengeApplication.class, args);
     }
-
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
 }
