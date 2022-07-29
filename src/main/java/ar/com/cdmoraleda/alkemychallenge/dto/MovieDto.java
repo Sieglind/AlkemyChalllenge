@@ -37,7 +37,7 @@ public class MovieDto {
 
     @NotNull(message = "Must not be null")
     @Min(value = 0, message = "Score must be positive")
-    @Max(value = 10, message = "Score must be lower than 10")
+    @Max(value = 5, message = "Score must be lower than 10")
     private Integer score;
 
     @NotEmpty(groups = OnCreateMovie.class, message = "Please add at least one character to the movie")
