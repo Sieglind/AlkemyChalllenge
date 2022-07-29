@@ -45,7 +45,7 @@ public class ApiUserService implements UserDetailsService {
         } else {
             apiUserDto.setPassword(passwordEncoder.encode(apiUserDto.getPassword()));
             apiUserRepository.save(new ApiUser(apiUserDto));
-//            emailService.sendConfirmation(apiUserDto);
+            emailService.sendConfirmation(apiUserDto);
             return new ResponseEntity<>("User successfully registered", HttpStatus.CREATED);
         }
     }
